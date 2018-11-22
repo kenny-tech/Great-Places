@@ -4,7 +4,8 @@ import { StyleSheet, FlatList } from 'react-native';
 
 const placeList = props => {
 
-    return <FlatList style={styles.listContainer}
+    return( 
+        <FlatList style={styles.listContainer}
             data={props.places}
             renderItem={(info) => (
               <ListItem
@@ -12,7 +13,8 @@ const placeList = props => {
                 placeImage={info.item.image}
                 onItemPressed={() => props.onItemSelected(info.item.key)}
               />
-            )}/>
+        )}/>
+    )
 };
 
 const styles = StyleSheet.create({
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 5,
     padding: 10,
-    backgroundColor: "#eee"
+    backgroundColor: "#fff"
   }
 });
 
