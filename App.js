@@ -3,13 +3,13 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from './src/components/PlaceList/PlaceList';
-import placeImage from './src/assets/flower.jpg';
-import placeDetail from './src/components/PlaceDetail/PlaceDetail';
+import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
 
 export default class App extends React.Component {
   state = {
       placeName: '',
-      places: []
+      places: [],
+      selectedPlace: null
   };
 
   placeNameChangedHandler = val => {
@@ -28,28 +28,51 @@ export default class App extends React.Component {
               places: prevState.places.concat({
                 key: Math.random(),
                 name: this.state.placeName,
-                image: placeImage
+                image: {
+                  uri: "https://c1.staticflickr.com/5/4096/4744241983_34023bf303_b.jpg"
+                }
               }),
           }
       });
   };
 
+  placeDeletedHandler = () => {
+    this.setState(prevState => {
+      return {
+          places: prevState.places.filter(place => {
+          return place.key !== prevState.selectedPlace.key;
+        }),
+        selectedPlace: null
+      };
+    });
+  }
+
+  modalClosedHandler = () => {
+    this.setState({
+      selectedPlace: null
+    });
+  }
+
   placeSelectedHandler = key => {
-    // this.setState(prevState => {
-    //   return {
-    //     places: prevState.places.filter(place => {
-    //       return place.key !== key;
-    //     })
-    //   };
-    // });
+    this.setState(prevState => {
+      return {
+        selectedPlace: prevState.places.find(place => {
+          return place.key === key;
+        })
+      };
+    });
   };
   
   render() {
     return (
       <View style={styles.container}>
-        <PlaceDetail />
-            <PlaceInput onPlaceNameChanged={this.placeNameChangedHandler} onPlaceSumbit={this.placeAddedHandler}/>
-            <PlaceList places={this.state.places} onItemSelected={this.placeSelectedHandler}/>
+        <PlaceDetail 
+          selectedPlace={this.state.selectedPlace} 
+          onItemDeleted={this.placeDeletedHandler}
+          onModalClosed={this.ModalClosedHandler}
+        />
+        <PlaceInput onPlaceNameChanged={this.placeNameChangedHandler} onPlaceSumbit={this.placeAddedHandler}/>
+        <PlaceList places={this.state.places} onItemSelected={this.placeSelectedHandler}/>
       </View>
     );
   }

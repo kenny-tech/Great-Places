@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center"
     },
-
     placeImage: {
         marginRight: 8,
         height: 30,
